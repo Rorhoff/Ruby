@@ -21,19 +21,23 @@ posts = JSON.parse(body)
 #	.map {|row| }
 #	.each {|title| puts title}
 
-# lookup 1: todos summarized by userId
-todo_tally = Hash.new(0)
-todos.each { |t| todo_tally[t["userId"]] += 1 }
+# --- piece 1: todos and the tally ---
+todos_body = Net::HTTP.get(URI("https://jsonplaceholder.typicode.com/todos"))
+todos = JSON.parse(todos_body)
 
-# lookup 2: posts summarized by userId
-post_tally = Hash.new(0)
-posts.each { |p| post_tally[p["userId"]] += 1 }
-
-# main loop: walk users, look each side up by id
-users.each do |user|
-  id = user["id"]
-  puts "#{user["name"]}: #{todo_tally[id]} todos, #{post_tally[id]} posts"
+tally = Hash.new(0)
+todos.each do |row|
+  tally[row["userId"]] += 1 if row["completed"]
 end
 
+# --- piece 2: fetch the users ---
+users_body = Net::HTTP.get(URI("https://jsonplaceholder.typicode.com/users"))
+users = JSON.parse(users_body)
+
+# --- piece 3: join and print ---
+users.each do |user|
+  count = tally[user["id"]]
+  puts "#{user["name"]}: #{count} completed"
+end
 
 
