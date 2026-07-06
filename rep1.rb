@@ -21,5 +21,10 @@ posts = JSON.parse(body)
 #	.map {|row| }
 #	.each {|title| puts title}
 
-Restored and Re-added to Git
+tally = Hash.new(0) #creates new array to story tally's in.
+posts.each do |row| # walks each row.
+ tally[row["userId"]] += 1 if row["completed"] # tally each row by user id and +1 if the row = completed.
+end # why do we gotta end here?
+tally.each { |user_id, count| puts "User #{user_id}: #{count} completed" } # grabs the user id, count and puts them on display
+
 
