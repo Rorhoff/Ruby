@@ -14,4 +14,12 @@ posts = JSON.parse(body)
 #.group_by →     GROUP BY   (bucket the rows by some key)
 #.each     >        
 
+#posts.select { |row|  row["userId"]  == 1 }
+
+#SELECT title FROM todos WHERE userId = 2
+#posts.select {|row| row["userId"] == 2}
+#	.map {|row| }
+#	.each {|title| puts title}
+
+Restored and Re-added to Git
 
