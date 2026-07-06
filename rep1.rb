@@ -21,5 +21,25 @@ posts = JSON.parse(body)
 #	.map {|row| }
 #	.each {|title| puts title}
 
-Restored and Re-added to Git
+# --- piece 1: todos and the tally ---
+todos_body = Net::HTTP.get(URI("https://jsonplaceholder.typicode.com/todos"))
+todos = JSON.parse(todos_body)
+
+tally = Hash.new(0)
+todos.each do |row|
+  tally[row["userId"]] += 1 if row["completed"]
+end
+
+# --- piece 2: fetch the users ---
+users_body = Net::HTTP.get(URI("https://jsonplaceholder.typicode.com/users"))
+users = JSON.parse(users_body)
+
+# --- piece 3: join and print ---
+users.each do |user|
+  count = tally[user["id"]]
+  puts "#{user["name"]}: #{count} completed"
+end
+
+
+TEST
 
