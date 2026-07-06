@@ -21,10 +21,19 @@ posts = JSON.parse(body)
 #	.map {|row| }
 #	.each {|title| puts title}
 
-tally = Hash.new(0) #creates new array to story tally's in.
-posts.each do |row| # walks each row.
- tally[row["userId"]] += 1 if row["completed"] # tally each row by user id and +1 if the row = completed.
-end # why do we gotta end here?
-tally.each { |user_id, count| puts "User #{user_id}: #{count} completed" } # grabs the user id, count and puts them on display
+# lookup 1: todos summarized by userId
+todo_tally = Hash.new(0)
+todos.each { |t| todo_tally[t["userId"]] += 1 }
+
+# lookup 2: posts summarized by userId
+post_tally = Hash.new(0)
+posts.each { |p| post_tally[p["userId"]] += 1 }
+
+# main loop: walk users, look each side up by id
+users.each do |user|
+  id = user["id"]
+  puts "#{user["name"]}: #{todo_tally[id]} todos, #{post_tally[id]} posts"
+end
+
 
 
